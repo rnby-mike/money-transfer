@@ -42,7 +42,7 @@ public class AccountService {
     public void transfer(long senderAccountId, long receiverAccountId, BigDecimal amount) {
 
         if (senderAccountId == receiverAccountId) {
-            return;
+            throw new IllegalArgumentException("sender is receiver are the same");
         }
 
         var senderAccount = accountDao.findById(senderAccountId);
