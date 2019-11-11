@@ -4,6 +4,7 @@ import app.exception.InsufficientBalanceException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -36,6 +37,11 @@ public class Account {
     }
 
     public void deposit(BigDecimal amount) {
+        Objects.requireNonNull(amount, "deposit amount is null");
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("deposit amount less than zero");
+        }
+
         // need to synchronize to avoid dirty reads
         lock.writeLock().lock();
         try {
@@ -46,6 +52,11 @@ public class Account {
     }
 
     public void withdraw(BigDecimal amount) {
+        Objects.requireNonNull(amount, "withdraw amount is null");
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("withdraw amount less than zero");
+        }
+
         lock.writeLock().lock();
         try {
             if (balance.compareTo(amount) < 0) {
@@ -59,5 +70,22 @@ public class Account {
 
     ReadWriteLock getLock() {
         return lock;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Account account = (Account) o;
+        return id == account.id && balance.equals(account.balance);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, balance);
     }
 }
