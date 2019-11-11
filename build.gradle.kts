@@ -10,7 +10,7 @@ repositories {
 }
 
 application {
-    mainClassName = "App"
+    mainClassName = "app.AppLauncher"
 }
 
 java {
@@ -26,5 +26,6 @@ dependencies {
     compile("com.fasterxml.jackson.core", "jackson-databind", "2.10.0")
     compile("org.slf4j", "slf4j-simple", "1.7.29")
 
+    testImplementation("io.rest-assured", "rest-assured", "4.1.2")
     testImplementation("org.junit.jupiter", "junit-jupiter", "5.5.2")
 }

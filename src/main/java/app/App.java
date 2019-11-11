@@ -17,19 +17,15 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class App {
 
-    public static AccountService accountService;
+    public static AccountService accountService = new AccountService(new AccountDao());
 
-    public static void main(String[] args) {
-
-        accountService = new AccountService(new AccountDao());
-
+    void start(int port) {
         JavalinValidation.register(BigDecimal.class, BigDecimal::new);
 
         var app = Javalin.create(config -> {
             config.showJavalinBanner = false;
             config.logIfServerNotStarted = true;
             config.defaultContentType = "application/json";
-            config.enableDevLogging();
             config.registerPlugin(new RouteOverviewPlugin("/info"));
         });
 
@@ -46,13 +42,14 @@ public class App {
             post("/transfers", TransferController.transfer);
         });
 
-        app.start(8080);
 
         app.exception(NoSuchAccountException.class, (ex, ctx) ->
                 ctx.status(404).json(new ErrorResponse(404, ex.getMessage())));
 
         app.exception(InsufficientBalanceException.class, (ex, ctx) ->
                 ctx.status(400).json(new ErrorResponse(400, "Insufficient balance")));
+
+        app.start(port);
 
         Runtime.getRuntime().addShutdownHook(new Thread(app::stop));
     }
