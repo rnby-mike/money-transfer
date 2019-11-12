@@ -8,11 +8,18 @@ import java.util.Objects;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * Holds account information.
+ */
 public class Account {
 
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     private final long id;
+    /**
+     * For simplicity BigDecimal is used with scale equal to 2.
+     * In real-world application more specialized classes must be used, eg Money from Joda library.
+     */
     private BigDecimal balance;
 
     public Account(long id, BigDecimal initialBalance) {
@@ -36,6 +43,12 @@ public class Account {
         }
     }
 
+    /**
+     * Deposit {@code amount} of money to this account.
+     * @param amount sum of money to deposit
+     * @throws NullPointerException if amount is null
+     * @throws IllegalArgumentException if amount less then zero
+     */
     public void deposit(BigDecimal amount) {
         Objects.requireNonNull(amount, "deposit amount is null");
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
@@ -51,6 +64,13 @@ public class Account {
         }
     }
 
+    /**
+     * Withdraw {@code amount} of money from this account.
+     * @param amount sum of money to withdraw
+     * @throws NullPointerException if amount is null
+     * @throws IllegalArgumentException if amount less then zero
+     * @throws InsufficientBalanceException if account has balance low then amount
+     */
     public void withdraw(BigDecimal amount) {
         Objects.requireNonNull(amount, "withdraw amount is null");
         if (amount.compareTo(BigDecimal.ZERO) < 0) {

@@ -6,6 +6,9 @@ import java.math.BigDecimal;
 
 import static app.App.accountService;
 
+/**
+ * Holds a bunch of handler to process accounts related requests.
+ */
 public class AccountController {
 
     public static Handler createAccount = ctx -> {

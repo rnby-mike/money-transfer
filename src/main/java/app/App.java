@@ -49,6 +49,9 @@ public class App {
         app.exception(InsufficientBalanceException.class, (ex, ctx) ->
                 ctx.status(400).json(new ErrorResponse(400, "Insufficient balance")));
 
+        app.exception(Exception.class, (ex, ctx) ->
+                ctx.status(500).json(new ErrorResponse(500, "Internal server error")));
+
         app.start(port);
 
         Runtime.getRuntime().addShutdownHook(new Thread(app::stop));
