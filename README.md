@@ -12,7 +12,7 @@ MONEY_TRANSFER_SERVER_PORT=8081 ./gradlew run
 Request body:
 ```json
 {
-	"initialBalance": float
+	"initialBalance": "float"
 }
 ```
 * `GET /accounts/{id}` - retrieves account information 
@@ -23,10 +23,10 @@ Request body:
 Request body:
 ```json
 {
-	"senderAccountId": integer,
-	"receiverAccountId": integer,
-	"amount": float
+	"senderAccountId": "integer",
+	"receiverAccountId": "integer",
+	"amount": "float"
 }
 ```
 
-You can see it in action in [test](src/test/java/app/MoneyTransferAppIT)
+You can see it in action in [test](src/test/java/app/MoneyTransferAppIT.java)
